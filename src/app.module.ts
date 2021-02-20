@@ -6,6 +6,8 @@ import { CONFIG } from 'config/config-keys';
 import { AuthModule } from 'modules/auth/auth.module';
 import { UserModule } from 'modules/user/user.module';
 import { UtilsModule } from 'utils/utils.module';
+import { APP_GUARD } from '@nestjs/core';
+import { GqlAuthGuard } from 'modules/auth/guards/gql-auth.guard';
 
 @Module({
   imports: [
@@ -23,7 +25,13 @@ import { UtilsModule } from 'utils/utils.module';
     AuthModule,
     UserModule,
   ],
-  providers: [],
+  providers: [
+    {
+      //by default each controller uses this guard
+      provide: APP_GUARD,
+      useClass: GqlAuthGuard,
+    },
+  ],
 })
 export class AppModule {
   static port: number;

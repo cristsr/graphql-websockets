@@ -14,8 +14,9 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { Auth } from './entities/auth.entity';
-import { LoginInput } from 'modules/auth/dto/login.input';
-import { GqlAuthGuard } from 'modules/auth/guards/gql-auth.guard';
+import { LoginInput } from './dto/login.input';
+import { GqlAuthGuard } from './guards/gql-auth.guard';
+import { Public } from './decorators/public';
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
@@ -35,6 +36,7 @@ export class AuthResolver {
   //   return this.authService.create(createAuthInput);
   // }
 
+  @Public()
   @Mutation(() => Auth, { name: 'login' })
   login(@Args('loginInput') loginInput: LoginInput) {
     Logger.log(loginInput, 'AuthResolver');
