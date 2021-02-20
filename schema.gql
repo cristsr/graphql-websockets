@@ -1,0 +1,81 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  """Example field (placeholder)"""
+  access_token: String!
+}
+
+type User {
+  """MongoId"""
+  id: String!
+
+  """Name of the user"""
+  name: String!
+
+  """Nickname of the user """
+  nickname: String!
+
+  """Age"""
+  age: Int!
+
+  """fake@gmail.com"""
+  email: String!
+}
+
+type Query {
+  whoAmI: Auth!
+  users: [User!]!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  login(loginInput: LoginInput!): Auth!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
+}
+
+input LoginInput {
+  """Email (placeholder)"""
+  email: String!
+
+  """Email (placeholder)"""
+  password: String!
+}
+
+input CreateUserInput {
+  """Name (cristian stiven p)"""
+  name: String!
+
+  """Nickname (csrex)"""
+  nickname: String!
+
+  """Age (22)"""
+  age: Int!
+
+  """email (jhon@gmail.com)"""
+  email: String!
+
+  """password (1234pass.)"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """Name (cristian stiven p)"""
+  name: String
+
+  """Nickname (csrex)"""
+  nickname: String
+
+  """Age (22)"""
+  age: Int
+
+  """email (jhon@gmail.com)"""
+  email: String
+
+  """password (1234pass.)"""
+  password: String
+  id: Int!
+}
