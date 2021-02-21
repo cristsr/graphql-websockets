@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { CONFIG } from 'core/config-keys';
 import { AuthService } from './services/auth.service';
-import { AuthResolver } from './auth.resolver';
 import { UtilsModule } from 'utils/utils.module';
 import { UserModule } from 'modules/user/user.module';
-import { CONFIG } from 'config/config-keys';
 import { JwtStrategy } from 'modules/auth/strategies/jwt.strategy';
 import { GqlAuthGuard } from 'modules/auth/guards/gql-auth.guard';
+import { AuthResolver } from './resolvers/auth.resolver';
 
 @Module({
   imports: [
@@ -27,6 +27,7 @@ import { GqlAuthGuard } from 'modules/auth/guards/gql-auth.guard';
     UtilsModule,
     UserModule,
   ],
-  providers: [AuthResolver, AuthService, JwtStrategy, GqlAuthGuard],
+  providers: [AuthService, JwtStrategy, GqlAuthGuard, AuthResolver],
+  exports: [AuthService],
 })
 export class AuthModule {}

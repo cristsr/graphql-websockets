@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """Example field (placeholder)"""
-  access_token: String!
-}
-
 type User {
   """MongoId"""
   id: String!
@@ -24,25 +19,22 @@ type User {
   email: String!
 }
 
+type Auth {
+  """Example field (placeholder)"""
+  accessToken: String!
+  user: User!
+}
+
 type Query {
-  whoAmI: Auth!
   users: [User!]!
-  user(id: Int!): User!
+  user: User!
 }
 
 type Mutation {
+  register(userInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): Auth!
-  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
-}
-
-input LoginInput {
-  """Email (placeholder)"""
-  email: String!
-
-  """Email (placeholder)"""
-  password: String!
 }
 
 input CreateUserInput {
@@ -59,6 +51,14 @@ input CreateUserInput {
   email: String!
 
   """password (1234pass.)"""
+  password: String!
+}
+
+input LoginInput {
+  """Email (placeholder)"""
+  email: String!
+
+  """Email (placeholder)"""
   password: String!
 }
 

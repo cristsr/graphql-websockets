@@ -7,20 +7,35 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { BcryptService } from 'utils/bcrypt/bcrypt.service';
 import { UserService } from 'modules/user/services/user.service';
+import { CreateUserInput } from 'modules/user/dto/create-user.input';
+import { LoginInput } from '../dto/login.input';
 
 @Injectable()
 export class AuthService {
   constructor(
     private bcrypt: BcryptService,
-    private userService: UserService,
     private jwtService: JwtService,
+    private userService: UserService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.userService.findByEmail(username);
+  async register(userInput: CreateUserInput) {
+    const user = await this.userService.findByEmail(userInput.email);
+
+    if (user) {
+      Logger.log(`${user.email} already exist `, 'AuthService.register');
+      throw new NotFoundException('Email already exists');
+    }
+
+    userInput.password = await this.bcrypt.hash(userInput.password);
+    Logger.log(`Register ${user.email} was successfully`, 'AuthService.login');
+    return this.userService.create(userInput);
+  }
+
+  async login({ email, password }: LoginInput) {
+    const user = await this.userService.findByEmail(email);
 
     if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
+      throw new NotFoundException('User not found');
     }
 
     const isMatch = await this.bcrypt.match(password, user.password);
@@ -29,18 +44,19 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    return {
+    const result = {
       id: user.id,
       name: user.name,
       email: user.email,
+      age: user.age,
+      nickname: user.nickname,
     };
-  }
 
-  async createJwt(user: any) {
-    Logger.log(user, 'AuthService.createUser');
+    Logger.log(`Login ${user.email} was successfully`, 'AuthService.login');
+
     return {
-      access_token: this.jwtService.sign(user),
-      user,
+      accessToken: this.jwtService.sign(result),
+      user: result,
     };
   }
 }

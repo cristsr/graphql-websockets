@@ -1,10 +1,9 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC } from '../decorators/public';
-import { AuthenticationError } from 'apollo-server-errors';
+import { IS_PUBLIC } from 'core/decorators/public';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
@@ -22,15 +21,12 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     ]);
 
     if (isPublic) {
+      Logger.log('Public resource', 'GqlAuthGuard');
       return true;
     }
 
+    Logger.log('Private resource', 'GqlAuthGuard');
+
     return super.canActivate(new ExecutionContextHost([req]));
-  }
-
-  handleRequest(err: any, user: any) {
-    throw new AuthenticationError('must authenticate');
-
-    return user;
   }
 }

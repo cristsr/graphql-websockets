@@ -4,7 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CONFIG } from 'config/config-keys';
+import { CONFIG } from '../../core/config-keys';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class BcryptService {
 
   async hash(str: string | number): Promise<string> {
     try {
-      return await bcrypt.hash(str, this.saltOrRounds);
+      return await bcrypt.hash(str, +this.saltOrRounds);
     } catch (e) {
       Logger.error(
         'Could not generate the hash',

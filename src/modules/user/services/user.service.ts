@@ -12,10 +12,8 @@ export class UserService {
     private userModel: Model<UserDocument>,
   ) {}
 
-  async create(createUserInput: CreateUserInput) {
-    const user = await this.userModel.create(createUserInput);
-    console.log(user.id);
-    return user;
+  async create(userInput: CreateUserInput) {
+    return await this.userModel.create(userInput);
   }
 
   findAll() {

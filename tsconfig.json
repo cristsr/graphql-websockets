@@ -11,8 +11,10 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "core/*": ["src/core/*"],
       "modules/*": ["src/modules/*"],
       "database/*": ["src/database/*"],
+      "graphql/*": ["src/graphql/*"],
       "config/*": ["src/config/*"],
       "utils/*": ["src/utils/*"],
       "assets/*": ["src/assets/*"]
