@@ -25,9 +25,18 @@ type Auth {
   user: User!
 }
 
+type Room {
+  """Name of the room"""
+  name: String!
+
+  """Room creator"""
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user: User!
+  room(id: Int!): Room!
 }
 
 type Mutation {
@@ -35,6 +44,9 @@ type Mutation {
   login(loginInput: LoginInput!): Auth!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  createRoom(createRoomInput: CreateRoomInput!): Room!
+  updateRoom(updateRoomInput: UpdateRoomInput!): Room!
+  removeRoom(id: Int!): Room!
 }
 
 input CreateUserInput {
@@ -77,5 +89,16 @@ input UpdateUserInput {
 
   """password (1234pass.)"""
   password: String
+  id: Int!
+}
+
+input CreateRoomInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateRoomInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }
