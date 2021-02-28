@@ -4,7 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CONFIG } from '../../core/config-keys';
+import { CONFIG } from 'core/config-keys';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
