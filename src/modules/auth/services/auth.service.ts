@@ -22,12 +22,12 @@ export class AuthService {
     const user = await this.userService.findByEmail(userInput.email);
 
     if (user) {
-      Logger.log(`${user.email} already exist `, 'AuthService.register');
+      Logger.log(`${user.email} already exist `, 'AuthService');
       throw new NotFoundException('Email already exists');
     }
 
     userInput.password = await this.bcrypt.hash(userInput.password);
-    Logger.log(`Register ${user.email} was successfully`, 'AuthService.login');
+    Logger.log(`Register ${user.email} was successfully`, 'AuthService');
     return this.userService.create(userInput);
   }
 
@@ -52,7 +52,7 @@ export class AuthService {
       nickname: user.nickname,
     };
 
-    Logger.log(`Login ${user.email} was successfully`, 'AuthService.login');
+    Logger.log(`Login ${user.email} was successfully`, 'AuthService');
 
     return {
       accessToken: this.jwtService.sign(result),

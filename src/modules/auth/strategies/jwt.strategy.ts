@@ -18,13 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  /**
-   * Callback used by passport before call all protected controller
-   * and it returns a model with information signed in jwt
-   * @param payload
-   */
   validate(payload: any) {
-    Logger.debug(payload, 'JwtStrategy.validate');
+    // Logger.debug(payload, 'JwtStrategy');
     return payload;
   }
 }

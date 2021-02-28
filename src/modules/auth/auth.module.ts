@@ -7,8 +7,9 @@ import { AuthService } from './services/auth.service';
 import { UtilsModule } from 'utils/utils.module';
 import { UserModule } from 'modules/user/user.module';
 import { JwtStrategy } from 'modules/auth/strategies/jwt.strategy';
-import { GqlAuthGuard } from 'modules/auth/guards/gql-auth.guard';
 import { AuthResolver } from './resolvers/auth.resolver';
+import { APP_GUARD } from '@nestjs/core';
+import { GqlJwtAuthGuard } from 'modules/auth/guards/gql-auth.guard';
 
 @Module({
   imports: [
@@ -16,18 +17,24 @@ import { AuthResolver } from './resolvers/auth.resolver';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        // Encryption string
-        secret: configService.get(CONFIG.JWT_SECRET_KEY),
+        secret: configService.get(CONFIG.JWT_SECRET_KEY), // Encryption string
         signOptions: {
-          // Expiration time
-          expiresIn: configService.get(CONFIG.JWT_EXPIRATION_TIME),
+          expiresIn: configService.get(CONFIG.JWT_EXPIRATION_TIME), // Expiration time
         },
       }),
     }),
     UtilsModule,
     UserModule,
   ],
-  providers: [AuthService, JwtStrategy, GqlAuthGuard, AuthResolver],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    AuthResolver,
+    {
+      provide: APP_GUARD, // By default each resolver uses this guard
+      useClass: GqlJwtAuthGuard,
+    },
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

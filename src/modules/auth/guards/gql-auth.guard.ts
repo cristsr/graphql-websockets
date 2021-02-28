@@ -6,27 +6,28 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC } from 'core/decorators/public';
 
 @Injectable()
-export class GqlAuthGuard extends AuthGuard('jwt') {
+export class GqlJwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
-    const { req } = ctx.getContext();
-
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
-      ctx.getHandler(),
-      ctx.getClass(),
-    ]);
-
-    if (isPublic) {
-      Logger.log('Public resource', 'GqlAuthGuard');
+  public canActivate(host: ExecutionContext) {
+    if (this.isPublic(host)) {
+      Logger.debug('Public resource', 'GqlJwtAuthGuard');
       return true;
     }
 
-    Logger.log('Private resource', 'GqlAuthGuard');
+    Logger.debug('Private resource', 'GqlJwtAuthGuard');
 
+    const ctx = GqlExecutionContext.create(host);
+    const { req } = ctx.getContext();
     return super.canActivate(new ExecutionContextHost([req]));
+  }
+
+  private isPublic(host: ExecutionContext): boolean {
+    return this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
+      host.getHandler(),
+      host.getClass(),
+    ]);
   }
 }
